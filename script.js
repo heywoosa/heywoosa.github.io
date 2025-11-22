@@ -1,0 +1,387 @@
+// --- 全域設定 ---
+
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
+// 如果還沒申請，可以先留空，連結依然有效但無法分潤
+const skyscannerAffiliateId = ""; 
+
+// 預設出發地機場代碼 (TPE = 桃園機場)
+const originAirport = "TPE"; 
+
+// --- 資料設定 ---
+
+// 2026 (民國115年) 請假攻略資料
+const strategies = [
+    {
+        name: "元旦跨年 (2026首發)",
+        displayPeriod: "2025/12/27 - 2026/1/4",
+        startDate: "2025/12/27",
+        endDate: "2026/01/04",
+        cost: 3,
+        totalDays: 9,
+        desc: "元旦在週四，1/2 彈性放假。往前請 12/29-31，跨年直接爽休 9 天！",
+        cpLevel: "high"
+    },
+    {
+        name: "春節+228 (神級連休)",
+        displayPeriod: "2/14 - 3/1",
+        startDate: "2026/02/14",
+        endDate: "2026/03/01",
+        cost: 4, 
+        totalDays: 16,
+        desc: "請 2/23-2/26 (4天)，無縫串聯春節與228連假，半個月不用進公司！",
+        cpLevel: "god"
+    },
+    {
+        name: "清明連假",
+        displayPeriod: "3/28 - 4/6",
+        startDate: "2026/03/28",
+        endDate: "2026/04/06",
+        cost: 4,
+        totalDays: 10,
+        desc: "請 3/30-4/2 (4天)，避開清明人潮，春天賞櫻最佳時機。",
+        cpLevel: "normal"
+    },
+    {
+        name: "端午避暑",
+        displayPeriod: "6/13 - 6/21",
+        startDate: "2026/06/13",
+        endDate: "2026/06/21",
+        cost: 4,
+        totalDays: 9,
+        desc: "請 6/15-6/18 (4天)，去海島國家剛剛好。",
+        cpLevel: "normal"
+    },
+    {
+        name: "中秋連假",
+        displayPeriod: "9/19 - 9/27",
+        startDate: "2026/09/19",
+        endDate: "2026/09/27",
+        cost: 4,
+        totalDays: 9,
+        desc: "請 9/21-9/24 (4天)，秋高氣爽出遊去。",
+        cpLevel: "normal"
+    },
+    {
+        name: "國慶連假",
+        displayPeriod: "10/3 - 10/11",
+        startDate: "2026/10/03",
+        endDate: "2026/10/11",
+        cost: 4,
+        totalDays: 9,
+        desc: "請 10/5-10/8 (4天)，消耗年底特休的好機會。",
+        cpLevel: "normal"
+    }
+];
+
+// 詳細飛行與旅遊資料 (已修正為 Skyscanner 支援的標準 IATA 代碼)
+const flightData = {
+    tokyo: { 
+        code: "TYO", // 東京全機場
+        time: "3小時 30分", 
+        region: "東北亞", 
+        daysRec: "建議 5 天",
+        currency: "日圓 (JPY)",
+        voltage: "100V (雙平腳)",
+        visa: "免簽證 (90天)"
+    },
+    osaka: { 
+        code: "OSA", // 大阪全機場 (包含關西KIX/伊丹ITM)
+        time: "2小時 40分", 
+        region: "東北亞", 
+        daysRec: "建議 5 天",
+        currency: "日圓 (JPY)",
+        voltage: "100V (雙平腳)",
+        visa: "免簽證 (90天)"
+    },
+    seoul: { 
+        code: "SEL", // 首爾全機場
+        time: "2小時 30分", 
+        region: "東北亞", 
+        daysRec: "建議 4-5 天",
+        currency: "韓元 (KRW)",
+        voltage: "220V (雙圓孔)",
+        visa: "免簽證 / K-ETA"
+    },
+    bangkok: { 
+        code: "BKKT", // 曼谷全機場
+        time: "3小時 50分", 
+        region: "東南亞", 
+        daysRec: "建議 5 天",
+        currency: "泰銖 (THB)",
+        voltage: "220V (雙孔通用)",
+        visa: "免簽證 (暫定)"
+    },
+    singapore: { 
+        code: "SIN", 
+        time: "4小時 30分", 
+        region: "東南亞", 
+        daysRec: "建議 4 天",
+        currency: "新幣 (SGD)",
+        voltage: "230V (英式三方孔)",
+        visa: "免簽證 (30天)"
+    },
+    la: { 
+        code: "LAX", 
+        time: "12小時 00分", 
+        region: "美洲", 
+        daysRec: "建議 10 天以上",
+        currency: "美金 (USD)",
+        voltage: "120V (雙平腳)",
+        visa: "需申請 ESTA"
+    },
+    london: { 
+        code: "LON", // 倫敦全機場
+        time: "14小時 10分", 
+        region: "歐洲", 
+        daysRec: "建議 10 天以上",
+        currency: "英鎊 (GBP)",
+        voltage: "230V (英式三方孔)",
+        visa: "免簽證 (180天)"
+    },
+    paris: { 
+        code: "PAR", // 巴黎全機場
+        time: "13小時 40分", 
+        region: "歐洲", 
+        daysRec: "建議 10 天以上",
+        currency: "歐元 (EUR)",
+        voltage: "230V (雙圓孔)",
+        visa: "免簽證 (90天)"
+    }
+};
+
+// --- 全域變數 ---
+let currentShareText = ""; 
+
+// --- 輔助功能：日期格式轉換 ---
+// 將 "2026/02/14" 轉為 Skyscanner 需要的 "260214" (YYMMDD)
+function formatDateForUrl(dateStr) {
+    if(!dateStr) return "";
+    // 移除所有非數字字符
+    const cleanDate = dateStr.replace(/\D/g, ''); 
+    // cleanDate 會是 "20260214"
+    // 取後6位變成 "260214"
+    return cleanDate.slice(2);
+}
+
+// --- 主要邏輯 ---
+
+// 1. 連假計算按鈕事件
+document.getElementById('calcBtn').addEventListener('click', function() {
+    const inputElement = document.getElementById('leaveInput');
+    const inputDays = parseInt(inputElement.value);
+    const resultSection = document.getElementById('resultSection');
+    const container = document.getElementById('resultContainer');
+    const midAd = document.getElementById('midPageAd');
+    const destSelect = document.getElementById('destinationSelect');
+    
+    container.innerHTML = '';
+    
+    if (isNaN(inputDays) || inputDays < 0) {
+        alert("請輸入有效的特休天數！");
+        return;
+    }
+
+    resultSection.classList.remove('hidden');
+    if(midAd) midAd.classList.remove('hidden');
+
+    const validStrategies = strategies.filter(s => inputDays >= s.cost);
+
+    if (validStrategies.length === 0) {
+        container.innerHTML = `
+            <div class="md:col-span-2 text-center text-slate-500 py-10 bg-slate-50 rounded-xl border border-slate-200 border-dashed">
+                <i class="fa-solid fa-piggy-bank text-4xl mb-3 text-slate-300"></i>
+                <p class="text-lg font-medium">特休餘額不足</p>
+                <p class="text-sm mt-1">2026 的攻略大多需要 3~4 天特休。<br>建議您安排週末的輕旅行！</p>
+            </div>
+        `;
+    } else {
+        validStrategies.forEach(strategy => {
+            // 判斷 CP 值樣式
+            let borderClass = 'border-l-8 border-teal-400';
+            let badge = '';
+            
+            if (strategy.cpLevel === 'god') {
+                borderClass = 'border-l-8 border-purple-500 ring-1 ring-purple-100';
+                badge = `<div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg shadow-sm">👑 神級攻略</div>`;
+            } else if (strategy.cpLevel === 'high') {
+                borderClass = 'border-l-8 border-orange-400';
+                badge = `<div class="absolute top-0 right-0 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg shadow-sm">🔥 CP值高</div>`;
+            }
+
+            const remaining = inputDays - strategy.cost;
+
+            // --- 動態產生機票連結 (Skyscanner) ---
+            const selectedDestValue = destSelect.value;
+            let destCode = "everywhere"; // 預設代碼
+            let btnText = "🔍 搜尋該時段機票"; // 預設文字
+            
+            if (selectedDestValue && flightData[selectedDestValue]) {
+                destCode = flightData[selectedDestValue].code;
+                // 抓取下拉選單的國家名稱 (例如 "日本")
+                const countryName = document.querySelector(`#destinationSelect option[value="${selectedDestValue}"]`).text.split(' ')[1]; 
+                btnText = `✈️ 搜${countryName}便宜機票`;
+            }
+
+            const startDateCode = formatDateForUrl(strategy.startDate);
+            const endDateCode = formatDateForUrl(strategy.endDate);
+            
+            // 修正網址結構：
+            // 1. 如果是 'everywhere' -> 使用 /transport/flights-from/ (搜尋所有目的地)
+            // 2. 如果是 特定地點 -> 使用 /transport/flights/ (搜尋特定目的地)
+            let flightUrl = "";
+
+            if (destCode === "everywhere") {
+                // 搜尋世界各地，網址不能包含目的地參數，且路徑不同
+                flightUrl = `https://www.skyscanner.com.tw/transport/flights-from/${originAirport}/${startDateCode}/${endDateCode}/`;
+            } else {
+                // 搜尋特定地點
+                flightUrl = `https://www.skyscanner.com.tw/transport/flights/${originAirport}/${destCode}/${startDateCode}/${endDateCode}/`;
+            }
+            
+            // 加上分潤 ID
+            if (skyscannerAffiliateId) {
+                flightUrl += `?affiliateId=${skyscannerAffiliateId}`;
+            }
+
+            // --- 建立卡片 HTML ---
+            const cardHTML = `
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-5 ${borderClass} relative overflow-hidden flex flex-col">
+                    ${badge}
+                    <div class="flex justify-between items-start mb-3 mt-2">
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-800">${strategy.name}</h4>
+                            <p class="text-sm text-slate-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i> ${strategy.displayPeriod}</p>
+                        </div>
+                        <div class="text-center bg-slate-100 rounded-lg p-2 min-w-[70px]">
+                            <span class="block text-2xl font-bold text-teal-600">${strategy.totalDays}</span>
+                            <span class="text-xs text-slate-500">連休</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-lg p-3 text-sm text-slate-600 space-y-2 mb-4 flex-grow">
+                        <p><i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>${strategy.desc}</p>
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-2 mt-2">
+                            <span><i class="fa-solid fa-ticket text-red-400 mr-1"></i>使用: <b>${strategy.cost}</b> 天</span>
+                            <span class="text-slate-400 text-xs">剩餘: ${remaining} 天</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-auto">
+                        <button onclick="openShareModal('${strategy.name}', '${strategy.desc}')" class="flex-1 text-center text-teal-600 text-sm border border-teal-200 rounded py-2 hover:bg-teal-50 transition flex items-center justify-center gap-1 font-medium">
+                            <i class="fa-solid fa-share-nodes"></i> 分享
+                        </button>
+                        
+                        <a href="${flightUrl}" target="_blank" class="flex-1 text-center bg-rose-500 hover:bg-rose-600 text-white text-sm rounded py-2 transition flex items-center justify-center gap-1 font-bold shadow-sm">
+                            ${btnText}
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += cardHTML;
+        });
+    }
+    
+    // 捲動到結果區
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// 2. 飛行選單改變事件 (連動更新機票按鈕連結)
+document.getElementById('destinationSelect').addEventListener('change', function() {
+    const val = this.value;
+    const resultDiv = document.getElementById('flightResult');
+    const calcBtn = document.getElementById('calcBtn');
+
+    // 如果結果區已經顯示，則重新觸發計算，以更新下方的機票連結
+    if (!document.getElementById('resultSection').classList.contains('hidden')) {
+        calcBtn.click();
+    }
+    
+    if (!val || !flightData[val]) {
+        resultDiv.classList.add('hidden');
+        resultDiv.classList.remove('flex');
+        return;
+    }
+
+    const data = flightData[val];
+    
+    resultDiv.classList.remove('hidden');
+    resultDiv.classList.add('flex');
+    
+    resultDiv.innerHTML = `
+        <div class="flex flex-col sm:flex-row justify-between items-center border-b border-indigo-100 pb-4 mb-2 w-full">
+            <div>
+                <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-1">平均飛行時間</p>
+                <p class="text-3xl font-extrabold text-indigo-900">
+                    <i class="fa-solid fa-plane text-indigo-300 mr-2"></i>${data.time}
+                </p>
+            </div>
+            <div class="mt-2 sm:mt-0 text-right">
+                <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded mb-1">${data.region}</span>
+                <p class="text-sm text-slate-500">${data.daysRec}</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-4 w-full text-center pt-2">
+            <div>
+                <i class="fa-solid fa-coins text-indigo-400 mb-1"></i>
+                <p class="text-xs text-slate-400">貨幣</p>
+                <p class="text-sm font-bold text-slate-700">${data.currency}</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-passport text-indigo-400 mb-1"></i>
+                <p class="text-xs text-slate-400">簽證</p>
+                <p class="text-sm font-bold text-slate-700">${data.visa}</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-plug text-indigo-400 mb-1"></i>
+                <p class="text-xs text-slate-400">電壓</p>
+                <p class="text-sm font-bold text-slate-700">${data.voltage}</p>
+            </div>
+        </div>
+    `;
+});
+
+// --- 社群分享功能邏輯 ---
+
+function openShareModal(name, desc) {
+    const myWebsiteUrl = "https://heywoosa.github.io/";
+    currentShareText = `【2026 請假攻略】\n${name}\n${desc}\n\n快來算你的連假方案：${myWebsiteUrl}`;
+    document.getElementById('shareModal').classList.remove('hidden');
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').classList.add('hidden');
+}
+
+function shareToLine() {
+    const url = `https://line.me/R/msg/text/?${encodeURIComponent(currentShareText)}`;
+    window.open(url, '_blank');
+    closeShareModal();
+}
+
+function shareToThreads() {
+    const url = `https://www.threads.net/intent/post?text=${encodeURIComponent(currentShareText)}`;
+    window.open(url, '_blank');
+    closeShareModal();
+}
+
+function copyAndOpenIG() {
+    navigator.clipboard.writeText(currentShareText).then(() => {
+        alert("文字已複製！\n即將為您打開 Instagram，您可以直接貼上發佈限動或貼文。");
+        window.location.href = "instagram://app"; 
+        setTimeout(function() {
+            window.open("https://www.instagram.com/", "_blank");
+        }, 500);
+    }).catch(err => {
+        console.error('複製失敗', err);
+        alert("複製失敗，請手動複製");
+    });
+    closeShareModal();
+}
+
+function copyTextOnly() {
+    navigator.clipboard.writeText(currentShareText).then(() => {
+        alert("攻略已複製到剪貼簿！");
+    });
+    closeShareModal();
+
+}
