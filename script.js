@@ -341,6 +341,69 @@ document.getElementById('destinationSelect').addEventListener('change', function
     
     // --- 效能優化：圖片加入 loading="lazy" ---
     resultDiv.innerHTML = `
+<div class="mb-4">
+            <button onclick="generateItinerary('${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]}', 5)" 
+                    id="aiBtn"
+                    class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> 
+                AI 幫我排 ${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]} 5天行程
+            </button>
+            
+            <div id="aiResult" class="hidden mt-4 bg-white p-4 rounded-lg border border-purple-100 text-sm leading-relaxed text-slate-700 h-64 overflow-y-auto">
+                </div>
+        </div>
+
+        ```
+
+**接著，在 `script.js` 的最下方，加入這段呼叫後端的功能函式：**
+
+```javascript
+// --- AI 行程生成功能 ---
+async function generateItinerary(destName, days) {
+    const btn = document.getElementById('aiBtn');
+    const resultBox = document.getElementById('aiResult');
+    
+    // 1. 鎖定按鈕，顯示載入中
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> AI 正在絞盡腦汁規劃中...';
+    resultBox.classList.add('hidden');
+    resultBox.innerHTML = '';
+
+    try {
+        // 2. 呼叫我們剛剛寫的 Vercel API
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                destination: destName, 
+                days: days 
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // 3. 成功：顯示結果
+            resultBox.innerHTML = data.result;
+            resultBox.classList.remove('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> 規劃完成！';
+        } else {
+            throw new Error(data.message || 'API Error');
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert('AI 腦袋打結了，請稍後再試！');
+        btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+
+    
         <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group bg-slate-200">
             <img 
                 src="${data.image}" 
