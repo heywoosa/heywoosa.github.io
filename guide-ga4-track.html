@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4/GTM 教學：追蹤「查機票」按鈕點擊率 (Click Rate) | Holihack</title>
+    <meta name="description" content="開發者必看！如何透過 Google Tag Manager (GTM) 精準追蹤機票比價按鈕的點擊次數，優化聯盟行銷效益。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; }</style>
+</head>
+<body class="text-slate-700 p-6 md:p-12">
+    <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-xl border-t-8 border-indigo-500">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-800 flex items-center">
+            <i class="fa-solid fa-chart-line text-indigo-500 mr-4"></i> GA4 追蹤教學：機票按鈕的點擊率分析
+        </h1>
+        <p class="mb-8 text-lg text-slate-600 border-b pb-4">
+            — 掌握這個技巧，才能知道你的網站是否真的賺錢！
+        </p>
+
+        <section class="prose max-w-none">
+            <h2 class="text-2xl font-bold mt-6 mb-3 text-teal-700">一、為什麼要用 GTM 追蹤按鈕？</h2>
+            <p>GA4 直接安裝雖然可以追蹤頁面瀏覽量，但無法知道使用者是否點擊了關鍵的 **「查機票」** 或 **「Klook 行程」** 按鈕。透過 Google Tag Manager (GTM)，我們可以精準發送「事件 (Event)」，這對優化聯盟行銷非常重要。</p>
+
+            <h2 class="text-2xl font-bold mt-8 mb-3 text-teal-700">二、GTM 步驟：追蹤「點擊事件」</h2>
+            <p>請先確保您已經將 GTM 代碼 (`GTM-MRN7GLNZ`) 貼入網站。</p>
+
+            <h3 class="text-xl font-bold mt-4 mb-2">Step 1: 啟用點擊變數 (Variables)</h3>
+            <p>在 GTM 後台：點擊 **「變數 (Variables)」** -> 在「內建變數」區塊點擊 **「設定 (Configure)」** -> 勾選 **「Click ID」** 和 **「Click Element」**。</p>
+
+            <h3 class="text-xl font-bold mt-4 mb-2">Step 2: 建立觸發條件 (Triggers)</h3>
+            <p>點擊 **「觸發條件 (Triggers)」** -> **「新增 (New)」** -> 選擇類型 **「僅限連結 (Just Links)」**。</p>
+            <ul class="list-disc pl-6 space-y-1 mt-2 text-slate-600">
+                <li>將觸發條件設為：**「部分連結點擊 (Some Link Clicks)」**。</li>
+                <li>條件設定：`Click ID` **包含** `calcBtn` 或 `flightLink`。</li>
+            </ul>
+
+            <h3 class="text-xl font-bold mt-4 mb-2">Step 3: 建立 GA4 代碼 (Tags)</h3>
+            <p>點擊 **「代碼 (Tags)」** -> **「新增 (New)」** -> 選擇類型 **「Google Analytics (GA4) 事件」**。</p>
+            <ul class="list-disc pl-6 space-y-1 mt-2 text-slate-600">
+                <li>**事件名稱**：設為 `affiliate_click`。</li>
+                <li>**觸發條件**：選擇剛剛建立的觸發條件。</li>
+            </ul>
+            <p class="font-bold text-indigo-600 bg-indigo-50 p-3 rounded-lg border border-indigo-200 mt-4">
+                ⭐ 提交 (Submit) 後，你就能在 GA4 報表裡看到每一筆機票按鈕的點擊次數了！
+            </p>
+        </section>
+        
+        <div class="mt-12 pt-6 border-t border-slate-200 text-center">
+            <a href="index.html" class="text-lg text-indigo-600 hover:text-indigo-800 font-bold flex items-center justify-center">
+                <i class="fa-solid fa-arrow-left mr-2"></i> 返回 Holihack 攻略首頁
+            </a>
+        </div>
+    </div>
+</body>
+</html>
