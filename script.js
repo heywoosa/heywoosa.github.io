@@ -72,7 +72,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (已填入你的 Klook 與 Saily 連結)
+// 詳細飛行與旅遊資料 (包含圖片與所有分潤連結)
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -82,9 +82,8 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        activity: "東京迪士尼 / Skyliner",
+        image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/KXQkeWEv",
-        // Saily 日本連結
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     osaka: { 
@@ -95,9 +94,8 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        activity: "環球影城 / 周遊卡",
+        image: "https://images.unsplash.com/photo-1590559399607-e94bcdbd1e02?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
-        // Saily 日本連結
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     seoul: { 
@@ -108,9 +106,8 @@ const flightData = {
         currency: "韓元 (KRW)",
         voltage: "220V (雙圓孔)",
         visa: "免簽證 / K-ETA",
-        activity: "首爾塔 / 樂天世界",
+        image: "https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/dFbiljcO",
-        // Saily 韓國連結
         esimLink: "https://saily.tpx.li/xOHkTeIS"
     },
     bangkok: { 
@@ -121,9 +118,8 @@ const flightData = {
         currency: "泰銖 (THB)",
         voltage: "220V (雙孔通用)",
         visa: "免簽證 (暫定)",
-        activity: "水上市場 / 按摩體驗",
+        image: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/BLSkVPup",
-        // Saily 泰國連結
         esimLink: "https://saily.tpx.li/cNiOBsjw"
     },
     singapore: { 
@@ -134,9 +130,8 @@ const flightData = {
         currency: "新幣 (SGD)",
         voltage: "230V (英式三方孔)",
         visa: "免簽證 (30天)",
-        activity: "環球影城 / 濱海灣花園",
+        image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/Whd4fr4m",
-        // Saily 新加坡連結
         esimLink: "https://saily.tpx.li/zKiKmHzi"
     },
     la: { 
@@ -147,9 +142,8 @@ const flightData = {
         currency: "美金 (USD)",
         voltage: "120V (雙平腳)",
         visa: "需申請 ESTA",
-        activity: "迪士尼 / 好萊塢影城",
+        image: "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/sXDqqfcl",
-        // Saily 美國連結
         esimLink: "https://saily.tpx.li/OFLJOMWU"
     },
     london: { 
@@ -160,9 +154,8 @@ const flightData = {
         currency: "英鎊 (GBP)",
         voltage: "230V (英式三方孔)",
         visa: "免簽證 (180天)",
-        activity: "倫敦眼 / 哈利波特影城",
+        image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/oBdkNOG8",
-        // Saily 英國連結
         esimLink: "https://saily.tpx.li/pBukZW4p"
     },
     paris: { 
@@ -173,9 +166,8 @@ const flightData = {
         currency: "歐元 (EUR)",
         voltage: "230V (雙圓孔)",
         visa: "免簽證 (90天)",
-        activity: "羅浮宮 / 迪士尼樂園",
+        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/NixH7qje",
-        // Saily 法國連結
         esimLink: "https://saily.tpx.li/DbGWDs9k"
     }
 };
@@ -241,7 +233,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- Skyscanner 連結 ---
+            // --- Skyscanner 機票連結 ---
             const selectedDestValue = destSelect.value;
             let destCode = "everywhere"; 
             let btnText = "🔍 搜尋該時段機票"; 
@@ -312,7 +304,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件
+// 2. 飛行選單改變事件 (包含圖片顯示優化)
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -333,52 +325,48 @@ document.getElementById('destinationSelect').addEventListener('change', function
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
     
+    // --- 升級版 UI：圖文卡片 ---
     resultDiv.innerHTML = `
-        <div class="flex flex-col sm:flex-row justify-between items-center border-b border-indigo-100 pb-4 mb-2 w-full">
-            <div>
-                <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-1">平均飛行時間</p>
-                <p class="text-3xl font-extrabold text-indigo-900">
-                    <i class="fa-solid fa-plane text-indigo-300 mr-2"></i>${data.time}
-                </p>
-            </div>
-            <div class="mt-2 sm:mt-0 text-right">
-                <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded mb-1">${data.region}</span>
-                <p class="text-sm text-slate-500">${data.daysRec}</p>
+        <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group">
+            <img src="${data.image}" alt="${data.region}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                <div>
+                    <p class="text-white font-bold text-2xl shadow-sm text-shadow">${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]}</p>
+                    <p class="text-indigo-200 text-sm flex items-center">
+                        <i class="fa-solid fa-plane-arrival mr-1"></i> 飛行約 ${data.time}
+                    </p>
+                </div>
             </div>
         </div>
-        
-        <div class="grid grid-cols-3 gap-4 w-full text-center pt-2 mb-4">
-            <div>
-                <i class="fa-solid fa-coins text-indigo-400 mb-1"></i>
+
+        <div class="grid grid-cols-3 gap-3 text-center mb-4">
+            <div class="bg-white p-2 rounded-lg border border-indigo-50 shadow-sm">
+                <i class="fa-solid fa-coins text-indigo-500 mb-1 text-lg"></i>
                 <p class="text-xs text-slate-400">貨幣</p>
-                <p class="text-sm font-bold text-slate-700">${data.currency}</p>
+                <p class="text-xs font-bold text-slate-700">${data.currency.split(' ')[0]}</p>
             </div>
-            <div>
-                <i class="fa-solid fa-passport text-indigo-400 mb-1"></i>
+            <div class="bg-white p-2 rounded-lg border border-indigo-50 shadow-sm">
+                <i class="fa-solid fa-passport text-indigo-500 mb-1 text-lg"></i>
                 <p class="text-xs text-slate-400">簽證</p>
-                <p class="text-sm font-bold text-slate-700">${data.visa}</p>
+                <p class="text-xs font-bold text-slate-700">${data.visa.split(' ')[0]}</p>
             </div>
-            <div>
-                <i class="fa-solid fa-plug text-indigo-400 mb-1"></i>
+            <div class="bg-white p-2 rounded-lg border border-indigo-50 shadow-sm">
+                <i class="fa-solid fa-plug text-indigo-500 mb-1 text-lg"></i>
                 <p class="text-xs text-slate-400">電壓</p>
-                <p class="text-sm font-bold text-slate-700">${data.voltage}</p>
+                <p class="text-xs font-bold text-slate-700">${data.voltage.split(' ')[0]}</p>
             </div>
         </div>
 
         ${data.link ? `
-        <div class="w-full pt-4 border-t border-indigo-100">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <a href="${data.link}" target="_blank" class="flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
-                    <i class="fa-solid fa-ticket mr-2 group-hover:rotate-12 transition-transform"></i>
-                    預訂行程 (Klook)
-                </a>
-                
-                <a href="${data.esimLink}" target="_blank" class="flex items-center justify-center w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
-                    <i class="fa-solid fa-wifi mr-2"></i>
-                    eSIM 網卡 (Saily)
-                </a>
-            </div>
-            <p class="text-xs text-center text-slate-400 mt-2">Klook 行程門票 & Saily 高速網路</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-indigo-50">
+            <a href="${data.link}" target="_blank" class="flex items-center justify-center w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
+                <i class="fa-solid fa-ticket mr-2 group-hover:-rotate-12 transition-transform"></i>
+                Klook 行程
+            </a>
+            <a href="${data.esimLink}" target="_blank" class="flex items-center justify-center w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
+                <i class="fa-solid fa-wifi mr-2"></i>
+                Saily 網卡
+            </a>
         </div>
         ` : ''}
     `;
