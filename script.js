@@ -1,6 +1,6 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner Affiliate ID (若無則留空)
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
 const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
@@ -72,7 +72,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (含 Saily/Klook 連結與圖片)
+// 詳細飛行與旅遊資料
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -94,6 +94,7 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
+        // 已更換為穩定圖源 (大阪城)
         image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
         esimLink: "https://saily.tpx.li/XGzD5n5B"
@@ -219,9 +220,10 @@ document.getElementById('calcBtn').addEventListener('click', function() {
             </div>
         `;
     } else {
-        // ★ 撒花特效邏輯 ★
-        const hasGodMode = validStrategies.some(s => s.cpLevel === 'god');
-        if (hasGodMode && window.confetti) {
+        // ★ 撒花特效 ★
+        // 只有當有「神級攻略 (god)」或「高CP值 (high)」時才撒花
+        const hasGoodNews = validStrategies.some(s => s.cpLevel === 'god' || s.cpLevel === 'high');
+        if (hasGoodNews && window.confetti) {
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -272,7 +274,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const calUrl = getGoogleCalendarUrl(`🎉 休假囉！(${strategy.name})`, strategy.startDate, strategy.endDate);
 
-            // --- 建立卡片 HTML (新增 hover 效果) ---
+            // --- 建立卡片 HTML (UI 增強版) ---
             const cardHTML = `
                 <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 ${borderClass} relative overflow-hidden flex flex-col border border-transparent hover:border-teal-100 group">
                     ${badge}
@@ -316,7 +318,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件 (圖片+資訊+按鈕)
+// 2. 飛行選單改變事件
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -337,9 +339,16 @@ document.getElementById('destinationSelect').addEventListener('change', function
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
     
+    // --- 效能優化：圖片加入 loading="lazy" ---
     resultDiv.innerHTML = `
-        <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group">
-            <img src="${data.image}" alt="${data.region}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+        <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group bg-slate-200">
+            <img 
+                src="${data.image}" 
+                alt="${data.region} 旅遊風景" 
+                loading="lazy" 
+                decoding="async"
+                class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+            >
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
                 <div>
                     <p class="text-white font-bold text-2xl shadow-sm text-shadow">${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]}</p>
