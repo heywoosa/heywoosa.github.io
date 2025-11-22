@@ -94,8 +94,8 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        // ★ 已更新為大阪道頓堀夜景圖 ★
-        image: "https://images.unsplash.com/photo-1590253232002-2f84d5b0a025?auto=format&fit=crop&w=800&q=80",
+        // ★ 已更換為大阪城圖片 (穩定版) ★
+        image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
@@ -305,7 +305,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件 (包含圖片顯示)
+// 2. 飛行選單改變事件
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
