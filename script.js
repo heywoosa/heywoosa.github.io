@@ -1,6 +1,6 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner Affiliate ID (若無則留空)
 const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
@@ -72,7 +72,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料
+// 詳細飛行與旅遊資料 (含 Saily/Klook 連結與圖片)
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -94,7 +94,6 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        // ★ 已更換為大阪城圖片 (穩定版) ★
         image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
         esimLink: "https://saily.tpx.li/XGzD5n5B"
@@ -220,6 +219,18 @@ document.getElementById('calcBtn').addEventListener('click', function() {
             </div>
         `;
     } else {
+        // ★ 撒花特效邏輯 ★
+        const hasGodMode = validStrategies.some(s => s.cpLevel === 'god');
+        if (hasGodMode && window.confetti) {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#2dd4bf', '#fbbf24', '#f472b6'],
+                disableForReducedMotion: true
+            });
+        }
+
         validStrategies.forEach(strategy => {
             let borderClass = 'border-l-8 border-teal-400';
             let badge = '';
@@ -234,7 +245,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- Skyscanner 機票連結 ---
+            // --- Skyscanner 連結 ---
             const selectedDestValue = destSelect.value;
             let destCode = "everywhere"; 
             let btnText = "🔍 搜尋該時段機票"; 
@@ -261,13 +272,13 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const calUrl = getGoogleCalendarUrl(`🎉 休假囉！(${strategy.name})`, strategy.startDate, strategy.endDate);
 
-            // --- 建立卡片 HTML ---
+            // --- 建立卡片 HTML (新增 hover 效果) ---
             const cardHTML = `
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-5 ${borderClass} relative overflow-hidden flex flex-col">
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 ${borderClass} relative overflow-hidden flex flex-col border border-transparent hover:border-teal-100 group">
                     ${badge}
                     <div class="flex justify-between items-start mb-3 mt-2">
                         <div>
-                            <h4 class="text-xl font-bold text-slate-800">${strategy.name}</h4>
+                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-teal-600 transition-colors">${strategy.name}</h4>
                             <p class="text-sm text-slate-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i> ${strategy.displayPeriod}</p>
                         </div>
                         <div class="text-center bg-slate-100 rounded-lg p-2 min-w-[70px]">
@@ -305,7 +316,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件
+// 2. 飛行選單改變事件 (圖片+資訊+按鈕)
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -326,7 +337,6 @@ document.getElementById('destinationSelect').addEventListener('change', function
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
     
-    // --- UI：圖文卡片 ---
     resultDiv.innerHTML = `
         <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group">
             <img src="${data.image}" alt="${data.region}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
