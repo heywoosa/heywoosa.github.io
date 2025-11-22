@@ -1,6 +1,6 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner Affiliate ID (若無則留空)
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
 const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
@@ -73,8 +73,10 @@ const strategies = [
 ];
 
 // 詳細飛行與旅遊資料
+// ★★★ 修正：加入 city 欄位，確保 AI 收到正確城市名 ★★★
 const flightData = {
     tokyo: { 
+        city: "東京", // 明確指定城市
         code: "TYO", 
         time: "3小時 30分", 
         region: "東北亞", 
@@ -87,6 +89,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     osaka: { 
+        city: "大阪", // 明確指定城市
         code: "OSA", 
         time: "2小時 40分", 
         region: "東北亞", 
@@ -99,6 +102,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     seoul: { 
+        city: "首爾",
         code: "SEL", 
         time: "2小時 30分", 
         region: "東北亞", 
@@ -111,6 +115,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/xOHkTeIS"
     },
     bangkok: { 
+        city: "曼谷",
         code: "BKKT", 
         time: "3小時 50分", 
         region: "東南亞", 
@@ -123,6 +128,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/cNiOBsjw"
     },
     singapore: { 
+        city: "新加坡",
         code: "SIN", 
         time: "4小時 30分", 
         region: "東南亞", 
@@ -135,6 +141,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/zKiKmHzi"
     },
     la: { 
+        city: "洛杉磯",
         code: "LAX", 
         time: "12小時 00分", 
         region: "美洲", 
@@ -147,6 +154,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/OFLJOMWU"
     },
     london: { 
+        city: "倫敦",
         code: "LON", 
         time: "14小時 10分", 
         region: "歐洲", 
@@ -159,6 +167,7 @@ const flightData = {
         esimLink: "https://saily.tpx.li/pBukZW4p"
     },
     paris: { 
+        city: "巴黎",
         code: "PAR", 
         time: "13小時 40分", 
         region: "歐洲", 
@@ -252,7 +261,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
             
             if (selectedDestValue && flightData[selectedDestValue]) {
                 destCode = flightData[selectedDestValue].code;
-                const countryName = document.querySelector(`#destinationSelect option[value="${selectedDestValue}"]`).text.split(' ')[1]; 
+                const countryName = flightData[selectedDestValue].city; // 使用正確的城市名稱
                 btnText = `✈️ 搜${countryName}便宜機票`;
             }
 
@@ -316,7 +325,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件 (包含 AI 按鈕)
+// 2. 飛行選單改變事件 (AI 與 圖片)
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -333,7 +342,7 @@ document.getElementById('destinationSelect').addEventListener('change', function
     }
 
     const data = flightData[val];
-    const destName = document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1];
+    const destName = data.city; // ★ 修正：直接使用資料庫裡的正確城市名稱
     
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
@@ -413,7 +422,6 @@ async function generateItinerary(destName, days) {
     resultBox.innerHTML = '';
 
     try {
-        // 呼叫 API
         const response = await fetch('/api/generate', {
             method: 'POST',
             headers: {
@@ -432,14 +440,13 @@ async function generateItinerary(destName, days) {
             resultBox.classList.remove('hidden');
             btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> 規劃完成！';
         } else {
-            // 處理非 200 的回應
             console.error("API Error Data:", data);
             throw new Error(data.message || '無法連線到 AI 服務');
         }
 
     } catch (error) {
         console.error("Fetch Error:", error);
-        alert('AI 暫時無法回應 (可能是 API Key 問題或 Vercel 設定問題)');
+        alert('AI 暫時無法回應，請稍後再試！');
         btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
     } finally {
         btn.disabled = false;
