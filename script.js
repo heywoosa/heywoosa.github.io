@@ -1,7 +1,6 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】等 Skyscanner 申請通過後，把 ID 填入這裡即可
-// 如果你是透過 Travelpayouts 申請到的，ID 通常是一串數字或 marker
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
 const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
@@ -73,7 +72,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (包含 Skyscanner 代碼 與 Klook 連結)
+// 詳細飛行與旅遊資料 (已填入你的 Klook 與 Saily 連結)
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -84,7 +83,9 @@ const flightData = {
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
         activity: "東京迪士尼 / Skyliner",
-        link: "https://klook.tpx.li/KXQkeWEv"
+        link: "https://klook.tpx.li/KXQkeWEv",
+        // Saily 日本連結
+        esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     osaka: { 
         code: "OSA", 
@@ -95,7 +96,9 @@ const flightData = {
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
         activity: "環球影城 / 周遊卡",
-        link: "https://klook.tpx.li/UFhy7kHv"
+        link: "https://klook.tpx.li/UFhy7kHv",
+        // Saily 日本連結
+        esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
     seoul: { 
         code: "SEL", 
@@ -106,7 +109,9 @@ const flightData = {
         voltage: "220V (雙圓孔)",
         visa: "免簽證 / K-ETA",
         activity: "首爾塔 / 樂天世界",
-        link: "https://klook.tpx.li/dFbiljcO"
+        link: "https://klook.tpx.li/dFbiljcO",
+        // Saily 韓國連結
+        esimLink: "https://saily.tpx.li/xOHkTeIS"
     },
     bangkok: { 
         code: "BKKT", 
@@ -117,7 +122,9 @@ const flightData = {
         voltage: "220V (雙孔通用)",
         visa: "免簽證 (暫定)",
         activity: "水上市場 / 按摩體驗",
-        link: "https://klook.tpx.li/BLSkVPup"
+        link: "https://klook.tpx.li/BLSkVPup",
+        // Saily 泰國連結
+        esimLink: "https://saily.tpx.li/cNiOBsjw"
     },
     singapore: { 
         code: "SIN", 
@@ -128,7 +135,9 @@ const flightData = {
         voltage: "230V (英式三方孔)",
         visa: "免簽證 (30天)",
         activity: "環球影城 / 濱海灣花園",
-        link: "https://klook.tpx.li/Whd4fr4m"
+        link: "https://klook.tpx.li/Whd4fr4m",
+        // Saily 新加坡連結
+        esimLink: "https://saily.tpx.li/zKiKmHzi"
     },
     la: { 
         code: "LAX", 
@@ -139,7 +148,9 @@ const flightData = {
         voltage: "120V (雙平腳)",
         visa: "需申請 ESTA",
         activity: "迪士尼 / 好萊塢影城",
-        link: "https://klook.tpx.li/sXDqqfcl"
+        link: "https://klook.tpx.li/sXDqqfcl",
+        // Saily 美國連結
+        esimLink: "https://saily.tpx.li/OFLJOMWU"
     },
     london: { 
         code: "LON", 
@@ -150,7 +161,9 @@ const flightData = {
         voltage: "230V (英式三方孔)",
         visa: "免簽證 (180天)",
         activity: "倫敦眼 / 哈利波特影城",
-        link: "https://klook.tpx.li/oBdkNOG8"
+        link: "https://klook.tpx.li/oBdkNOG8",
+        // Saily 英國連結
+        esimLink: "https://saily.tpx.li/pBukZW4p"
     },
     paris: { 
         code: "PAR", 
@@ -161,7 +174,9 @@ const flightData = {
         voltage: "230V (雙圓孔)",
         visa: "免簽證 (90天)",
         activity: "羅浮宮 / 迪士尼樂園",
-        link: "https://klook.tpx.li/NixH7qje"
+        link: "https://klook.tpx.li/NixH7qje",
+        // Saily 法國連結
+        esimLink: "https://saily.tpx.li/DbGWDs9k"
     }
 };
 
@@ -226,7 +241,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- Skyscanner 連結產生 ---
+            // --- Skyscanner 連結 ---
             const selectedDestValue = destSelect.value;
             let destCode = "everywhere"; 
             let btnText = "🔍 搜尋該時段機票"; 
@@ -351,12 +366,19 @@ document.getElementById('destinationSelect').addEventListener('change', function
         </div>
 
         ${data.link ? `
-        <div class="w-full pt-3 border-t border-indigo-100">
-            <a href="${data.link}" target="_blank" class="flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
-                <i class="fa-solid fa-ticket mr-2 group-hover:rotate-12 transition-transform"></i>
-                預訂${data.activity} (Klook)
-            </a>
-            <p class="text-xs text-center text-slate-400 mt-2">網卡、交通、門票一站搞定</p>
+        <div class="w-full pt-4 border-t border-indigo-100">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="${data.link}" target="_blank" class="flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
+                    <i class="fa-solid fa-ticket mr-2 group-hover:rotate-12 transition-transform"></i>
+                    預訂行程 (Klook)
+                </a>
+                
+                <a href="${data.esimLink}" target="_blank" class="flex items-center justify-center w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
+                    <i class="fa-solid fa-wifi mr-2"></i>
+                    eSIM 網卡 (Saily)
+                </a>
+            </div>
+            <p class="text-xs text-center text-slate-400 mt-2">Klook 行程門票 & Saily 高速網路</p>
         </div>
         ` : ''}
     `;
