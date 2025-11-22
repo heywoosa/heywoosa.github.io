@@ -1,8 +1,7 @@
 // --- 全域設定 ---
 
 // ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
-// 如果還沒申請，可以先留空，連結依然有效但無法分潤
-const skyscannerAffiliateId = ""; 
+const skyscannerAffiliateId = ""; // 如果之後有申請到 Skyscanner 專屬 ID 再填入
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
 const originAirport = "TPE"; 
@@ -73,43 +72,51 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (已修正為 Skyscanner 支援的標準 IATA 代碼)
+// 詳細飛行與旅遊資料 (已填入你的 Klook 連結)
 const flightData = {
     tokyo: { 
-        code: "TYO", // 東京全機場
+        code: "TYO", 
         time: "3小時 30分", 
         region: "東北亞", 
         daysRec: "建議 5 天",
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
-        visa: "免簽證 (90天)"
+        visa: "免簽證 (90天)",
+        activity: "東京迪士尼 / Skyliner",
+        link: "https://klook.tpx.li/KXQkeWEv"
     },
     osaka: { 
-        code: "OSA", // 大阪全機場 (包含關西KIX/伊丹ITM)
+        code: "OSA", 
         time: "2小時 40分", 
         region: "東北亞", 
         daysRec: "建議 5 天",
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
-        visa: "免簽證 (90天)"
+        visa: "免簽證 (90天)",
+        activity: "環球影城 / 周遊卡",
+        link: "https://klook.tpx.li/UFhy7kHv"
     },
     seoul: { 
-        code: "SEL", // 首爾全機場
+        code: "SEL", 
         time: "2小時 30分", 
         region: "東北亞", 
         daysRec: "建議 4-5 天",
         currency: "韓元 (KRW)",
         voltage: "220V (雙圓孔)",
-        visa: "免簽證 / K-ETA"
+        visa: "免簽證 / K-ETA",
+        activity: "首爾塔 / 樂天世界",
+        link: "https://klook.tpx.li/dFbiljcO"
     },
     bangkok: { 
-        code: "BKKT", // 曼谷全機場
+        code: "BKKT", 
         time: "3小時 50分", 
         region: "東南亞", 
         daysRec: "建議 5 天",
         currency: "泰銖 (THB)",
         voltage: "220V (雙孔通用)",
-        visa: "免簽證 (暫定)"
+        visa: "免簽證 (暫定)",
+        activity: "水上市場 / 按摩體驗",
+        link: "https://klook.tpx.li/BLSkVPup"
     },
     singapore: { 
         code: "SIN", 
@@ -118,7 +125,9 @@ const flightData = {
         daysRec: "建議 4 天",
         currency: "新幣 (SGD)",
         voltage: "230V (英式三方孔)",
-        visa: "免簽證 (30天)"
+        visa: "免簽證 (30天)",
+        activity: "環球影城 / 濱海灣花園",
+        link: "https://klook.tpx.li/Whd4fr4m"
     },
     la: { 
         code: "LAX", 
@@ -127,25 +136,31 @@ const flightData = {
         daysRec: "建議 10 天以上",
         currency: "美金 (USD)",
         voltage: "120V (雙平腳)",
-        visa: "需申請 ESTA"
+        visa: "需申請 ESTA",
+        activity: "迪士尼 / 好萊塢影城",
+        link: "https://klook.tpx.li/sXDqqfcl"
     },
     london: { 
-        code: "LON", // 倫敦全機場
+        code: "LON", 
         time: "14小時 10分", 
         region: "歐洲", 
         daysRec: "建議 10 天以上",
         currency: "英鎊 (GBP)",
         voltage: "230V (英式三方孔)",
-        visa: "免簽證 (180天)"
+        visa: "免簽證 (180天)",
+        activity: "倫敦眼 / 哈利波特影城",
+        link: "https://klook.tpx.li/oBdkNOG8"
     },
     paris: { 
-        code: "PAR", // 巴黎全機場
+        code: "PAR", 
         time: "13小時 40分", 
         region: "歐洲", 
         daysRec: "建議 10 天以上",
         currency: "歐元 (EUR)",
         voltage: "230V (雙圓孔)",
-        visa: "免簽證 (90天)"
+        visa: "免簽證 (90天)",
+        activity: "羅浮宮 / 迪士尼樂園",
+        link: "https://klook.tpx.li/NixH7qje"
     }
 };
 
@@ -153,14 +168,20 @@ const flightData = {
 let currentShareText = ""; 
 
 // --- 輔助功能：日期格式轉換 ---
-// 將 "2026/02/14" 轉為 Skyscanner 需要的 "260214" (YYMMDD)
 function formatDateForUrl(dateStr) {
     if(!dateStr) return "";
-    // 移除所有非數字字符
     const cleanDate = dateStr.replace(/\D/g, ''); 
-    // cleanDate 會是 "20260214"
-    // 取後6位變成 "260214"
-    return cleanDate.slice(2);
+    return cleanDate.slice(2); // YYMMDD
+}
+
+// 產生 Google Calendar 連結
+function getGoogleCalendarUrl(title, startStr, endStr) {
+    // 格式轉換 YYYY/MM/DD -> YYYYMMDD
+    const start = startStr.replace(/\//g, '');
+    // Google 日曆結束日期需要 +1 天，這裡為求簡便直接用結束日期，通常會顯示為當天結束
+    const end = endStr.replace(/\//g, '');
+    
+    return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${start}/${end}&details=由2026請假攻略計算產生`;
 }
 
 // --- 主要邏輯 ---
@@ -196,7 +217,6 @@ document.getElementById('calcBtn').addEventListener('click', function() {
         `;
     } else {
         validStrategies.forEach(strategy => {
-            // 判斷 CP 值樣式
             let borderClass = 'border-l-8 border-teal-400';
             let badge = '';
             
@@ -210,14 +230,13 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- 動態產生機票連結 (Skyscanner) ---
+            // --- 機票連結產生 ---
             const selectedDestValue = destSelect.value;
-            let destCode = "everywhere"; // 預設代碼
-            let btnText = "🔍 搜尋該時段機票"; // 預設文字
+            let destCode = "everywhere"; 
+            let btnText = "🔍 搜尋該時段機票"; 
             
             if (selectedDestValue && flightData[selectedDestValue]) {
                 destCode = flightData[selectedDestValue].code;
-                // 抓取下拉選單的國家名稱 (例如 "日本")
                 const countryName = document.querySelector(`#destinationSelect option[value="${selectedDestValue}"]`).text.split(' ')[1]; 
                 btnText = `✈️ 搜${countryName}便宜機票`;
             }
@@ -225,23 +244,19 @@ document.getElementById('calcBtn').addEventListener('click', function() {
             const startDateCode = formatDateForUrl(strategy.startDate);
             const endDateCode = formatDateForUrl(strategy.endDate);
             
-            // 修正網址結構：
-            // 1. 如果是 'everywhere' -> 使用 /transport/flights-from/ (搜尋所有目的地)
-            // 2. 如果是 特定地點 -> 使用 /transport/flights/ (搜尋特定目的地)
             let flightUrl = "";
-
             if (destCode === "everywhere") {
-                // 搜尋世界各地，網址不能包含目的地參數，且路徑不同
                 flightUrl = `https://www.skyscanner.com.tw/transport/flights-from/${originAirport}/${startDateCode}/${endDateCode}/`;
             } else {
-                // 搜尋特定地點
                 flightUrl = `https://www.skyscanner.com.tw/transport/flights/${originAirport}/${destCode}/${startDateCode}/${endDateCode}/`;
             }
             
-            // 加上分潤 ID
             if (skyscannerAffiliateId) {
                 flightUrl += `?affiliateId=${skyscannerAffiliateId}`;
             }
+
+            // --- Google 行事曆連結 ---
+            const calUrl = getGoogleCalendarUrl(`🎉 休假囉！(${strategy.name})`, strategy.startDate, strategy.endDate);
 
             // --- 建立卡片 HTML ---
             const cardHTML = `
@@ -257,13 +272,17 @@ document.getElementById('calcBtn').addEventListener('click', function() {
                             <span class="text-xs text-slate-500">連休</span>
                         </div>
                     </div>
-                    <div class="bg-slate-50 rounded-lg p-3 text-sm text-slate-600 space-y-2 mb-4 flex-grow">
+                    <div class="bg-slate-50 rounded-lg p-3 text-sm text-slate-600 space-y-2 mb-2 flex-grow">
                         <p><i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>${strategy.desc}</p>
                         <div class="flex items-center justify-between border-t border-slate-200 pt-2 mt-2">
                             <span><i class="fa-solid fa-ticket text-red-400 mr-1"></i>使用: <b>${strategy.cost}</b> 天</span>
                             <span class="text-slate-400 text-xs">剩餘: ${remaining} 天</span>
                         </div>
                     </div>
+
+                    <a href="${calUrl}" target="_blank" class="text-xs text-slate-400 underline hover:text-teal-600 block text-center mb-4">
+                        <i class="fa-regular fa-calendar-plus"></i> 加入 Google 行事曆
+                    </a>
                     
                     <div class="flex gap-3 mt-auto">
                         <button onclick="openShareModal('${strategy.name}', '${strategy.desc}')" class="flex-1 text-center text-teal-600 text-sm border border-teal-200 rounded py-2 hover:bg-teal-50 transition flex items-center justify-center gap-1 font-medium">
@@ -280,17 +299,15 @@ document.getElementById('calcBtn').addEventListener('click', function() {
         });
     }
     
-    // 捲動到結果區
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件 (連動更新機票按鈕連結)
+// 2. 飛行選單改變事件
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
     const calcBtn = document.getElementById('calcBtn');
 
-    // 如果結果區已經顯示，則重新觸發計算，以更新下方的機票連結
     if (!document.getElementById('resultSection').classList.contains('hidden')) {
         calcBtn.click();
     }
@@ -320,7 +337,7 @@ document.getElementById('destinationSelect').addEventListener('change', function
             </div>
         </div>
         
-        <div class="grid grid-cols-3 gap-4 w-full text-center pt-2">
+        <div class="grid grid-cols-3 gap-4 w-full text-center pt-2 mb-4">
             <div>
                 <i class="fa-solid fa-coins text-indigo-400 mb-1"></i>
                 <p class="text-xs text-slate-400">貨幣</p>
@@ -337,13 +354,23 @@ document.getElementById('destinationSelect').addEventListener('change', function
                 <p class="text-sm font-bold text-slate-700">${data.voltage}</p>
             </div>
         </div>
+
+        ${data.link ? `
+        <div class="w-full pt-3 border-t border-indigo-100">
+            <a href="${data.link}" target="_blank" class="flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold py-3 rounded-lg transition shadow-md group">
+                <i class="fa-solid fa-ticket mr-2 group-hover:rotate-12 transition-transform"></i>
+                預訂${data.activity} (Klook)
+            </a>
+            <p class="text-xs text-center text-slate-400 mt-2">網卡、交通、門票一站搞定</p>
+        </div>
+        ` : ''}
     `;
 });
 
-// --- 社群分享功能邏輯 ---
+// --- 社群分享功能 ---
 
 function openShareModal(name, desc) {
-    const myWebsiteUrl = "https://heywoosa.github.io/";
+    const myWebsiteUrl = window.location.href; 
     currentShareText = `【2026 請假攻略】\n${name}\n${desc}\n\n快來算你的連假方案：${myWebsiteUrl}`;
     document.getElementById('shareModal').classList.remove('hidden');
 }
@@ -383,5 +410,4 @@ function copyTextOnly() {
         alert("攻略已複製到剪貼簿！");
     });
     closeShareModal();
-
 }
