@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>2026 請假攻略 & 機票比價計算機 | 最強連假規劃</title>
     <meta name="description" content="2026年(民國115年)最強請假攻略計算機，輸入特休天數自動計算連假方案。一鍵查詢日本、韓國、泰國便宜機票，包含飛行時間與旅遊資訊查詢。">
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3692027013192646"
-     crossorigin="anonymous"></script>
+    <meta property="og:title" content="2026 請假攻略 & 機票比價 | 只要請 4 天休 16 天！" />
+    <meta property="og:description" content="輸入特休天數，一鍵算出 2026 最強連假。內建 Skyscanner 機票比價，明年春節出國必備工具。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://heywoosa.github.io/" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3692027013192646" crossorigin="anonymous"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="text-slate-700 flex flex-col min-h-screen relative">
+<body class="text-slate-700 flex flex-col min-h-screen relative font-[Noto_Sans_TC]">
 
     <header class="bg-teal-700 text-white py-10 shadow-lg">
         <div class="container mx-auto px-4 text-center">
@@ -42,7 +51,7 @@
             <div class="flex flex-col md:flex-row gap-4 items-end">
                 <div class="w-full md:w-1/2">
                     <label class="block text-sm font-medium text-slate-500 mb-1">輸入剩餘特休天數</label>
-                    <input id="leaveInput" type="number" min="0" placeholder="例如：4" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-lg bg-slate-50">
+                    <input id="leaveInput" type="number" inputmode="numeric" min="0" placeholder="例如：4" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-lg bg-slate-50">
                 </div>
                 <button id="calcBtn" class="w-full md:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg transition transform hover:scale-105 shadow-md">
                     <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>開始計算
@@ -78,7 +87,7 @@
                 </div>
 
                 <div id="flightResult" class="hidden md:col-span-2 bg-indigo-50 rounded-xl p-5 flex-col gap-4 border border-indigo-100 fade-in">
-                    </div>
+                </div>
             </div>
         </section>
 
@@ -87,7 +96,7 @@
                 <i class="fa-solid fa-star mr-2"></i> 為你推薦的 2026 方案
             </h3>
             <div id="resultContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in">
-                </div>
+            </div>
         </section>
 
         <div class="my-10 text-center hidden" id="midPageAd">
