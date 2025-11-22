@@ -1,6 +1,6 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
+// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner Affiliate ID (若無則留空)
 const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
@@ -94,7 +94,6 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        // 已更換為穩定圖源 (大阪城)
         image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
         esimLink: "https://saily.tpx.li/XGzD5n5B"
@@ -220,10 +219,9 @@ document.getElementById('calcBtn').addEventListener('click', function() {
             </div>
         `;
     } else {
-        // ★ 撒花特效 ★
-        // 只有當有「神級攻略 (god)」或「高CP值 (high)」時才撒花
-        const hasGoodNews = validStrategies.some(s => s.cpLevel === 'god' || s.cpLevel === 'high');
-        if (hasGoodNews && window.confetti) {
+        // 撒花特效
+        const hasGodMode = validStrategies.some(s => s.cpLevel === 'god' || s.cpLevel === 'high');
+        if (hasGodMode && window.confetti) {
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -247,7 +245,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- Skyscanner 連結 ---
+            // Skyscanner 連結
             const selectedDestValue = destSelect.value;
             let destCode = "everywhere"; 
             let btnText = "🔍 搜尋該時段機票"; 
@@ -274,7 +272,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const calUrl = getGoogleCalendarUrl(`🎉 休假囉！(${strategy.name})`, strategy.startDate, strategy.endDate);
 
-            // --- 建立卡片 HTML (UI 增強版) ---
+            // 卡片 HTML
             const cardHTML = `
                 <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 ${borderClass} relative overflow-hidden flex flex-col border border-transparent hover:border-teal-100 group">
                     ${badge}
@@ -318,7 +316,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件
+// 2. 飛行選單改變事件 (包含 AI 按鈕)
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -335,75 +333,12 @@ document.getElementById('destinationSelect').addEventListener('change', function
     }
 
     const data = flightData[val];
+    const destName = document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1];
     
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
     
-    // --- 效能優化：圖片加入 loading="lazy" ---
     resultDiv.innerHTML = `
-<div class="mb-4">
-            <button onclick="generateItinerary('${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]}', 5)" 
-                    id="aiBtn"
-                    class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center">
-                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> 
-                AI 幫我排 ${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]} 5天行程
-            </button>
-            
-            <div id="aiResult" class="hidden mt-4 bg-white p-4 rounded-lg border border-purple-100 text-sm leading-relaxed text-slate-700 h-64 overflow-y-auto">
-                </div>
-        </div>
-
-        ```
-
-**接著，在 `script.js` 的最下方，加入這段呼叫後端的功能函式：**
-
-```javascript
-// --- AI 行程生成功能 ---
-async function generateItinerary(destName, days) {
-    const btn = document.getElementById('aiBtn');
-    const resultBox = document.getElementById('aiResult');
-    
-    // 1. 鎖定按鈕，顯示載入中
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> AI 正在絞盡腦汁規劃中...';
-    resultBox.classList.add('hidden');
-    resultBox.innerHTML = '';
-
-    try {
-        // 2. 呼叫我們剛剛寫的 Vercel API
-        const response = await fetch('/api/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                destination: destName, 
-                days: days 
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            // 3. 成功：顯示結果
-            resultBox.innerHTML = data.result;
-            resultBox.classList.remove('hidden');
-            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> 規劃完成！';
-        } else {
-            throw new Error(data.message || 'API Error');
-        }
-
-    } catch (error) {
-        console.error(error);
-        alert('AI 腦袋打結了，請稍後再試！');
-        btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
-    } finally {
-        btn.disabled = false;
-    }
-}
-
-
-    
         <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group bg-slate-200">
             <img 
                 src="${data.image}" 
@@ -414,12 +349,23 @@ async function generateItinerary(destName, days) {
             >
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
                 <div>
-                    <p class="text-white font-bold text-2xl shadow-sm text-shadow">${document.querySelector(`#destinationSelect option[value="${val}"]`).text.split(' ')[1]}</p>
+                    <p class="text-white font-bold text-2xl shadow-sm text-shadow">${destName}</p>
                     <p class="text-indigo-200 text-sm flex items-center">
                         <i class="fa-solid fa-plane-arrival mr-1"></i> 飛行約 ${data.time}
                     </p>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-4">
+            <button onclick="generateItinerary('${destName}', 5)" 
+                    id="aiBtn"
+                    class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> 
+                AI 幫我排 ${destName} 5天行程
+            </button>
+            
+            <div id="aiResult" class="hidden mt-4 bg-white p-4 rounded-lg border border-purple-100 text-sm leading-relaxed text-slate-700 h-64 overflow-y-auto"></div>
         </div>
 
         <div class="grid grid-cols-3 gap-3 text-center mb-4">
@@ -454,6 +400,51 @@ async function generateItinerary(destName, days) {
         ` : ''}
     `;
 });
+
+// --- AI 行程生成功能 (呼叫 Vercel 後端) ---
+async function generateItinerary(destName, days) {
+    const btn = document.getElementById('aiBtn');
+    const resultBox = document.getElementById('aiResult');
+    
+    // UI 鎖定
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> AI 正在絞盡腦汁規劃中...';
+    resultBox.classList.add('hidden');
+    resultBox.innerHTML = '';
+
+    try {
+        // 呼叫 API
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                destination: destName, 
+                days: days 
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            resultBox.innerHTML = data.result;
+            resultBox.classList.remove('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> 規劃完成！';
+        } else {
+            // 處理非 200 的回應
+            console.error("API Error Data:", data);
+            throw new Error(data.message || '無法連線到 AI 服務');
+        }
+
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        alert('AI 暫時無法回應 (可能是 API Key 問題或 Vercel 設定問題)');
+        btn.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
+    } finally {
+        btn.disabled = false;
+    }
+}
 
 // --- 社群分享功能 ---
 function openShareModal(name, desc) {
