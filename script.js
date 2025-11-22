@@ -72,7 +72,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (包含圖片與所有分潤連結)
+// 詳細飛行與旅遊資料
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -94,7 +94,8 @@ const flightData = {
         currency: "日圓 (JPY)",
         voltage: "100V (雙平腳)",
         visa: "免簽證 (90天)",
-        image: "https://images.unsplash.com/photo-1590559399607-e94bcdbd1e02?auto=format&fit=crop&w=800&q=80",
+        // ★ 已更新為大阪道頓堀夜景圖 ★
+        image: "https://images.unsplash.com/photo-1590253232002-2f84d5b0a025?auto=format&fit=crop&w=800&q=80",
         link: "https://klook.tpx.li/UFhy7kHv",
         esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
@@ -304,7 +305,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// 2. 飛行選單改變事件 (包含圖片顯示優化)
+// 2. 飛行選單改變事件 (包含圖片顯示)
 document.getElementById('destinationSelect').addEventListener('change', function() {
     const val = this.value;
     const resultDiv = document.getElementById('flightResult');
@@ -325,7 +326,7 @@ document.getElementById('destinationSelect').addEventListener('change', function
     resultDiv.classList.remove('hidden');
     resultDiv.classList.add('flex');
     
-    // --- 升級版 UI：圖文卡片 ---
+    // --- UI：圖文卡片 ---
     resultDiv.innerHTML = `
         <div class="relative h-48 rounded-xl overflow-hidden mb-4 shadow-md group">
             <img src="${data.image}" alt="${data.region}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
