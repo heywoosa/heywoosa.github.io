@@ -1,7 +1,8 @@
 // --- 全域設定 ---
 
-// ⚠️ 【賺錢設定】請在此填入你的 Skyscanner/Travelpayouts Affiliate ID
-const skyscannerAffiliateId = ""; // 如果之後有申請到 Skyscanner 專屬 ID 再填入
+// ⚠️ 【賺錢設定】等 Skyscanner 申請通過後，把 ID 填入這裡即可
+// 如果你是透過 Travelpayouts 申請到的，ID 通常是一串數字或 marker
+const skyscannerAffiliateId = ""; 
 
 // 預設出發地機場代碼 (TPE = 桃園機場)
 const originAirport = "TPE"; 
@@ -72,7 +73,7 @@ const strategies = [
     }
 ];
 
-// 詳細飛行與旅遊資料 (已填入你的 Klook 連結)
+// 詳細飛行與旅遊資料 (包含 Skyscanner 代碼 與 Klook 連結)
 const flightData = {
     tokyo: { 
         code: "TYO", 
@@ -167,26 +168,21 @@ const flightData = {
 // --- 全域變數 ---
 let currentShareText = ""; 
 
-// --- 輔助功能：日期格式轉換 ---
+// --- 輔助功能 ---
 function formatDateForUrl(dateStr) {
     if(!dateStr) return "";
     const cleanDate = dateStr.replace(/\D/g, ''); 
     return cleanDate.slice(2); // YYMMDD
 }
 
-// 產生 Google Calendar 連結
 function getGoogleCalendarUrl(title, startStr, endStr) {
-    // 格式轉換 YYYY/MM/DD -> YYYYMMDD
     const start = startStr.replace(/\//g, '');
-    // Google 日曆結束日期需要 +1 天，這裡為求簡便直接用結束日期，通常會顯示為當天結束
-    const end = endStr.replace(/\//g, '');
-    
+    const end = endStr.replace(/\//g, ''); 
     return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${start}/${end}&details=由2026請假攻略計算產生`;
 }
 
 // --- 主要邏輯 ---
 
-// 1. 連假計算按鈕事件
 document.getElementById('calcBtn').addEventListener('click', function() {
     const inputElement = document.getElementById('leaveInput');
     const inputDays = parseInt(inputElement.value);
@@ -230,7 +226,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
             const remaining = inputDays - strategy.cost;
 
-            // --- 機票連結產生 ---
+            // --- Skyscanner 連結產生 ---
             const selectedDestValue = destSelect.value;
             let destCode = "everywhere"; 
             let btnText = "🔍 搜尋該時段機票"; 
@@ -255,7 +251,6 @@ document.getElementById('calcBtn').addEventListener('click', function() {
                 flightUrl += `?affiliateId=${skyscannerAffiliateId}`;
             }
 
-            // --- Google 行事曆連結 ---
             const calUrl = getGoogleCalendarUrl(`🎉 休假囉！(${strategy.name})`, strategy.startDate, strategy.endDate);
 
             // --- 建立卡片 HTML ---
@@ -368,7 +363,6 @@ document.getElementById('destinationSelect').addEventListener('change', function
 });
 
 // --- 社群分享功能 ---
-
 function openShareModal(name, desc) {
     const myWebsiteUrl = window.location.href; 
     currentShareText = `【2026 請假攻略】\n${name}\n${desc}\n\n快來算你的連假方案：${myWebsiteUrl}`;
