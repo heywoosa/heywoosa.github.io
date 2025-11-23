@@ -36,6 +36,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -43,7 +45,9 @@
     
     <style>
         /* 確保中文字體顯示正常 */
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh;
+        }
         /* 隱藏 Chrome/Safari 的數字輸入箭頭 */
         input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
@@ -202,7 +206,6 @@
                 </a>
             </div>
         </section>
-
     </main>
 
     <footer class="bg-slate-800 text-center text-slate-400 py-8 text-sm mt-auto">

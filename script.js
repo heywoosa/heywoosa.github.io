@@ -12,7 +12,7 @@ const originAirport = "TPE";
 const strategies = [
     { name: "元旦", displayPeriod: "2025/12/27 - 2026/1/4", startDate: "2025-12-27", endDate: "2026-01-04", targetDays: 9, cost: 3, requiredLeaveDays: 3, type: 'long', cpLevel: "high" },
     { name: "春節 & 228 連休", displayPeriod: "2/14 - 3/1", startDate: "2026-02-14", endDate: "2026-03-01", targetDays: 16, cost: 4, requiredLeaveDays: 4, type: 'super', cpLevel: "god" },
-    { name: "清明節", displayPeriod: "2026/04/03 - 2026/04/12", startDate: "2026-04-03", endDate: "2026-04-12", targetDays: 10, cost: 4, requiredLeaveDays: 4, type: 'long', cpLevel: "normal" },
+    { name: "清明節", displayPeriod: "2026/04/03 - 2026/04-12", startDate: "2026-04-03", endDate: "2026-04-12", targetDays: 10, cost: 4, requiredLeaveDays: 4, type: 'long', cpLevel: "normal" },
     { name: "端午節", displayPeriod: "2026/06/19 - 2026/06-28", startDate: "2026-06-19", endDate: "2026-06-28", targetDays: 10, cost: 4, requiredLeaveDays: 4, type: 'long', cpLevel: "normal" },
     { name: "中秋節", displayPeriod: "2026/10/02 - 2026/10-06", startDate: "2026-10-02", endDate: "2026-10-06", targetDays: 5, cost: 2, requiredLeaveDays: 2, type: 'short', cpLevel: "short" },
     { name: "國慶日", displayPeriod: "2026/10/09 - 2026/10-18", startDate: "2026-10-09", endDate: "2026-10-18", targetDays: 10, cost: 4, requiredLeaveDays: 4, type: 'long', cpLevel: "normal" },
@@ -20,13 +20,11 @@ const strategies = [
 
 // 旅遊目的地資料 (包含機票連結參數和圖片版權)
 const flightData = {
-    // 預設 (未選)
     'none': { 
         city: '未選擇目的地', name: '未選擇目的地', currency: 'TWD', 
         link: '', esimLink: '', image: 'https://images.unsplash.com/photo-1517400508544-7f830d17676e?auto=format&fit=crop&w=800&q=80',
         photographer: 'Photo by Annie Spratt / Unsplash', airport: '' 
     },
-    // 日本
     'tokyo': { 
         city: "東京", name: '日本 東京 (NRT)', code: "TYO", time: "3小時 30分", region: "東北亞", daysRec: "建議 5 天", currency: "日圓 (JPY)", voltage: "100V (雙平腳)", visa: "免簽證 (90天)", 
         image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
@@ -37,7 +35,6 @@ const flightData = {
         image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
         photographer: 'Photo by Yu Kato / Unsplash', link: "https://klook.tpx.li/UFhy7kHv", esimLink: "https://saily.tpx.li/XGzD5n5B"
     },
-    // 韓國
     'seoul': { 
         city: "首爾", name: '韓國 首爾 (ICN)', code: "SEL", time: "2小時 30分", region: "東北亞", daysRec: "建議 4-5 天", currency: "韓元 (KRW)", voltage: "220V (雙圓孔)", visa: "免簽證 / K-ETA", 
         image: "https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=800&q=80",
@@ -48,7 +45,6 @@ const flightData = {
         image: "https://images.unsplash.com/photo-1563242045-8f6424e8e121?auto=format&fit=crop&w=800&q=80",
         photographer: 'Photo by Eugene P / Unsplash', link: "https://klook.tpx.li/your_busan_link", esimLink: "https://saily.tpx.li/xOHkTeIS"
     },
-    // 泰國
     'thailand': { 
         city: "曼谷", name: '泰國 曼谷 (BKK)', code: "BKK", time: "3小時 50分", region: "東南亞", daysRec: "建議 5 天", currency: "泰銖 (THB)", voltage: "220V (雙孔通用)", visa: "免簽證 (暫定)", 
         image: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=800&q=80",
@@ -57,9 +53,8 @@ const flightData = {
     'phuket': { 
         city: "普吉島", name: '泰國 普吉島 (HKT)', code: "HKT", time: "4小時 40分", region: "東南亞", daysRec: "建議 6 天", currency: "泰銖 (THB)", voltage: "220V (雙孔通用)", visa: "免簽證 (暫定)", 
         image: "https://images.unsplash.com/photo-1615852504443-4e892c2b7f7e?auto=format&fit=crop&w=800&q=80",
-        photographer: 'Photo by T. P. Wong / Unsplash', link: "https://klook.tpx.li/your_phuket_link", esimLink: "https://saily.tpx.li/cNiOBsjw"
+        photographer: 'Photo by T. P. Wong / Unsplash', link: "https://klook.tp.st/your_phuket_link", esimLink: "https://saily.tpx.li/cNiOBsjw"
     },
-    // 亞洲其他
     'hongkong': { 
         city: "香港", name: '香港 (HKG)', code: "HKG", time: "1小時 40分", region: "東北亞", daysRec: "建議 3-4 天", currency: "港幣 (HKD)", voltage: "220V (英式三腳)", visa: "免簽證 (30天)", 
         image: "https://images.unsplash.com/photo-1517400508544-7f830d17676e?auto=format&fit=crop&w=800&q=80",
@@ -75,7 +70,6 @@ const flightData = {
         image: "https://images.unsplash.com/photo-1516008104337-b6fd14589926?auto=format&fit=crop&w=800&q=80",
         photographer: 'Photo by M. H. Vu / Unsplash', link: "https://klook.tp.st/your_hanoi_link", esimLink: "https://saily.tpx.li/esim-vietnam"
     },
-    // 長程
     'la': { 
         city: "洛杉磯", name: '美國 洛杉磯 (LAX)', code: "LAX", time: "12小時 00分", region: "美洲", daysRec: "建議 10 天以上", currency: "美金 (USD)", voltage: "120V (雙平腳)", visa: "需申請 ESTA", 
         image: "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?auto=format&fit=crop&w=800&q=80",
@@ -94,13 +88,11 @@ const flightData = {
 };
 
 // ===============================================
-// 2. 輔助函式 (日期處理)
+// 2. 輔助函式 (日期處理與工具)
 // ===============================================
 
 /**
  * 將日期字串格式化為 Skyscanner 要求的 YYMMDD 格式 (例如: 2026-01-01 -> 260101)
- * @param {string} dateString - YYYY-MM-DD
- * @returns {string} YYMMDD
  */
 function formatToSkyscannerDate(dateString) {
     const parts = dateString.split('-');
@@ -137,11 +129,10 @@ document.getElementById('calcBtn').addEventListener('click', function() {
         return;
     }
 
-    // 篩選出符合使用者特休天數的連假策略
-    const validStrategies = holidays2026.map(holiday => {
+    // 篩選出符合使用者特休天數的連假策略 (這裡的 requiredDays 來自 holidays2026 模擬數據)
+    const validStrategies = strategies.map(holiday => {
         let requiredLeaveDays;
         
-        // 模擬攻略所需的請假天數 (硬編碼自 HOLIDAYS2026)
         if (holiday.targetDays === 16) {
             requiredLeaveDays = 4;
         } else if (holiday.targetDays === 10) {
@@ -172,7 +163,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
         salaryResultP.innerHTML = '（連假方案不足，無法計算薪水小偷金額）';
         return;
     }
-
+    
     // 將最佳策略 (總天數最長) 放在最前面
     validStrategies.sort((a, b) => b.totalDays - a.totalDays);
     
@@ -232,52 +223,43 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 
         // 組合 HTML 卡片
         htmlContent += `
-            <div class="bg-white rounded-xl shadow-2xl overflow-hidden mb-6 border-t-8 border-indigo-500 transform hover:scale-[1.01] transition duration-300">
-                <div class="relative h-48 bg-cover bg-center" style="background-image: url('${data.image}');">
-                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-end p-4">
-                        <span class="text-4xl font-black text-white leading-none">${totalDays} 天連休</span>
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 border-t-8 border-indigo-500 transform hover:scale-[1.01] overflow-hidden flex flex-col group">
+                <div class="flex justify-between items-start mb-3 mt-2">
+                    <div>
+                        <h4 class="text-2xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">${strategy.name} 攻略</h4>
+                        <p class="text-sm text-slate-500 font-medium">${startDate.replace('2026-','')} - ${endDate.replace('2026-','')}</p>
+                    </div>
+                    <div class="text-center bg-indigo-50 rounded-lg p-2 min-w-[70px] border border-indigo-200">
+                        <span class="block text-3xl font-black text-indigo-700">${totalDays}</span>
+                        <span class="text-xs text-slate-600">連休</span>
                     </div>
                 </div>
                 
-                <div class="p-5">
-                    <h4 class="text-2xl font-extrabold mb-2 text-indigo-700">${strategy.name} 攻略</h4>
-                    <p class="text-sm text-slate-500 mb-4">
-                        從 ${startDate.replace('2026-','')} 到 ${endDate.replace('2026-','')}
-                    </p>
-                    
-                    <div class="mb-4 space-y-2">
-                        <div class="bg-indigo-50 p-3 rounded-lg flex justify-between items-center font-bold text-indigo-800 border-l-4 border-indigo-600">
-                            <span>需要請假：</span>
-                            <span class="text-2xl">${requiredDays} 天特休</span>
-                        </div>
-                        <div class="bg-yellow-50 p-3 rounded-lg flex justify-between items-center font-bold text-yellow-800 border-l-4 border-yellow-600">
-                            <span>實際放假：</span>
-                            <span class="text-2xl">${totalDays} 天</span>
-                        </div>
+                <div class="mb-4 space-y-2">
+                    <div class="bg-teal-50 p-3 rounded-lg flex justify-between items-center font-bold text-teal-800 border-l-4 border-teal-600">
+                        <span>特休請假：</span>
+                        <span class="text-xl">${requiredDays} 天</span>
                     </div>
-
-                    ${salaryInfo}
-
-                    <div class="mt-6 border-t pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${linkSection}
-
-                        <button onclick="generateAITrip('${data.city}', '${startDate}', '${endDate}', '${totalDays}')" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 text-center flex items-center justify-center shadow-md">
-                            <i class="fa-solid fa-robot mr-2"></i> AI 規劃行程
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3 mt-3 text-sm">
-                        <a href="${data.esimLink}" target="_blank" class="text-center py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
-                            <i class="fa-solid fa-wifi mr-1"></i> Saily eSIM
-                        </a>
-                        <a href="${data.link}" target="_blank" class="text-center py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
-                            <i class="fa-solid fa-ticket mr-1"></i> Klook 行程
-                        </a>
-                    </div>
-                    
-                    <p class="text-xs text-slate-400 mt-3 text-right">圖片來源: ${data.photographer}</p>
-
                 </div>
+
+                ${salaryInfo}
+                
+                <div class="mt-6 pt-4 border-t border-slate-100">
+                    ${linkSection}
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-3 text-sm">
+                    <a href="${data.esimLink}" target="_blank" class="text-center py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+                        <i class="fa-solid fa-wifi mr-1"></i> Saily eSIM
+                    </a>
+                    <a href="${data.link}" target="_blank" class="text-center py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+                        <i class="fa-solid fa-ticket mr-1"></i> Klook 行程
+                    </a>
+                </div>
+                
+                <a href="${calUrl}" target="_blank" class="text-xs text-slate-400 underline hover:text-teal-600 block text-center mt-3">
+                    <i class="fa-regular fa-calendar-plus"></i> 加入 Google 行事曆
+                </a>
             </div>
         `;
     });
@@ -291,35 +273,17 @@ document.getElementById('calcBtn').addEventListener('click', function() {
 // ===============================================
 
 function triggerConfetti() {
-    const confettiContainer = document.createElement('div');
-    confettiContainer.className = 'confetti-container fixed inset-0 pointer-events-none z-50';
-    document.body.appendChild(confettiContainer);
-    
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti absolute w-3 h-3 rounded-full opacity-0';
-        confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `${-20 + Math.random() * 5}%`;
-        confetti.style.backgroundColor = ['#FFD700', '#FF6347', '#4682B4'][Math.floor(Math.random() * 3)];
-        confetti.style.animation = `fall ${1 + Math.random() * 2}s ease-in-out forwards ${Math.random()}s`;
-        confettiContainer.appendChild(confetti);
+    // 使用引入的 CDN 腳本執行撒花
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#2dd4bf', '#fbbf24', '#f472b6'],
+            disableForReducedMotion: true
+        });
     }
-    
-    // 移除特效
-    setTimeout(() => {
-        confettiContainer.remove();
-    }, 4000);
 }
-
-const style = document.createElement('style');
-style.innerHTML = `
-    @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
-
 
 async function generateAITrip(destination, start, end, totalDays) {
     const aiButton = event.currentTarget;
@@ -349,29 +313,77 @@ async function generateAITrip(destination, start, end, totalDays) {
             },
             body: JSON.stringify({ 
                 destination: destination, 
-                days: totalDays // 傳遞實際天數給 API
+                days: totalDays 
             })
         });
 
         const data = await response.json();
 
         if (response.ok) {
+            // ★ 資安修復：使用 DOMPurify 淨化 AI 內容 ★
+            const cleanHTML = DOMPurify.sanitize(data.result);
+
             aiResultDiv.innerHTML = `<div class="mt-4 p-4 bg-purple-50 border-t-2 border-purple-500 rounded-lg shadow-inner text-left">
                 <h4 class="text-xl font-bold text-purple-700 mb-3"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> AI 推薦行程 (${totalDays}天)</h4>
-                <div class="ai-content">${data.result}</div>
+                <div class="ai-content">${cleanHTML}</div>
             </div>`;
             aiResultDiv.classList.remove('hidden');
             aiButton.innerHTML = '<i class="fa-solid fa-check mr-2"></i> 規劃完成！';
         } else {
             console.error("API Error Data:", data);
-            throw new Error(data.message || '無法連線到 AI 服務');
+            alert('AI 暫時無法回應，請檢查 Vercel Logs！');
+            aiButton.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
         }
 
     } catch (error) {
         console.error("Fetch Error:", error);
-        alert('AI 暫時無法回應，請檢查 Vercel Logs！');
+        alert('AI 暫時無法回應，請稍後再試！');
         aiButton.innerHTML = '<i class="fa-solid fa-rotate-right mr-2"></i> 再試一次';
     } finally {
         aiButton.disabled = false;
     }
-}s
+}
+
+// --- 社群分享功能 (保持不變) ---
+function openShareModal(name, desc) {
+    const myWebsiteUrl = window.location.href; 
+    currentShareText = `【2026 請假攻略】\n${name}\n${desc}\n\n快來算你的連假方案：${myWebsiteUrl}`;
+    document.getElementById('shareModal').classList.remove('hidden');
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').classList.add('hidden');
+}
+
+function shareToLine() {
+    const url = `https://line.me/R/msg/text/?${encodeURIComponent(currentShareText)}`;
+    window.open(url, '_blank');
+    closeShareModal();
+}
+
+function shareToThreads() {
+    const url = `https://www.threads.net/intent/post?text=${encodeURIComponent(currentShareText)}`;
+    window.open(url, '_blank');
+    closeShareModal();
+}
+
+function copyAndOpenIG() {
+    navigator.clipboard.writeText(currentShareText).then(() => {
+        alert("文字已複製！\n即將為您打開 Instagram，您可以直接貼上發佈限動或貼文。");
+        window.location.href = "instagram://app"; 
+        setTimeout(function() {
+            window.open("https://www.instagram.com/", "_blank");
+        }, 500);
+    }).catch(err => {
+        console.error('複製失敗', err);
+        alert("複製失敗，請手動複製");
+    });
+    closeShareModal();
+}
+
+function copyTextOnly() {
+    navigator.clipboard.writeText(currentShareText).then(() => {
+        alert("攻略已複製到剪貼簿！");
+    });
+    closeShareModal();
+}
