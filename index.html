@@ -1,72 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MRN7GLNZ');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Holihack | 2026 請假攻略 & 智慧旅遊計算機</title>
     <meta name="description" content="輸入特休天數，立即算出 2026 年最強連假方案。搭配 AI 行程規劃，聰明休假就靠 Holihack！">
-    <meta property="og:title" content="🔥 2026 請假攻略：算出你的薪水小偷假！">
-    <meta property="og:description" content="Holihack 智慧連假計算機，告訴你如何請假最划算！">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://holihack.com/">
+    
+    <meta property="og:title" content="🔥 2026 請假攻略：算出你的薪水小偷假！" />
+    <meta property="og:description" content="Holihack 智慧連假計算機，告訴你如何請假最划算！" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://holihack.com/" />
+    <meta property="og:image" content="" /> 
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X106LM3Q8N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-X106LM3Q8N');
+    </script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3692027013192646" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Holihack 2026 請假攻略 | 薪水小偷計算機",
-      "url": "https://holihack.com/",
-      "description": "計算 2026 年請假攻略，自動帶入機票比價與 eSIM 網卡資訊。最優化你的假期安排。",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://holihack.com/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-
     <style>
         /* 確保中文字體顯示正常 */
-        body { 
-            font-family: 'Noto Sans TC', sans-serif; 
-            background-color: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
         /* 隱藏 Chrome/Safari 的數字輸入箭頭 */
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        /* Confetti 樣式 */
+        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
     </style>
 </head>
-<body>
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-slate-800 flex items-center">
-                <i class="fa-solid fa-plane-up text-indigo-500 mr-2"></i> Holihack
+<body class="text-slate-700 flex flex-col min-h-screen relative font-[Noto_Sans_TC]">
+
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRN7GLNZ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <header class="bg-gradient-to-r from-teal-700 to-teal-600 text-white py-12 shadow-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-32 h-32 bg-white opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"></div>
+        <div class="absolute bottom-0 right-0 w-48 h-48 bg-yellow-300 opacity-10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
+
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-sm">
+                <i class="fa-solid fa-plane-departure mr-3 text-teal-200"></i>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-50 to-teal-100">2026 請假攻略</span>
             </h1>
-            <p class="text-sm text-slate-500 hidden sm:block">2026 智慧連假規劃工具</p>
+            <p class="text-teal-100 text-lg md:text-xl font-light">
+                輸入特休，一鍵算出 <span class="font-bold text-white border-b-2 border-yellow-400 pb-0.5">最強連假</span> 與 <span class="font-bold text-white border-b-2 border-yellow-400 pb-0.5">最殺機票</span>
+            </p>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8 flex-grow">
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
         
         <div class="w-full h-[100px] bg-slate-100 flex items-center justify-center text-slate-500 text-sm mb-8 rounded-lg border border-slate-200">
             廣告顯示區域 (Top Banner)
         </div>
-
-        <h2 class="text-3xl font-extrabold text-slate-800 mb-6">
-            🛠️ 2026 請假攻略計算機
-        </h2>
 
         <section class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl shadow-lg p-6 mb-8 border-t-4 border-yellow-500">
             <h3 class="text-xl font-bold mb-4 flex items-center text-slate-800">
@@ -85,7 +93,7 @@
                 </div>
             </div>
         </section>
-        <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+        <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 mb-8">
             
             <h3 class="text-xl font-bold mb-4 flex items-center text-slate-800">
                 <i class="fa-solid fa-list-ol text-indigo-500 mr-3"></i>
@@ -99,13 +107,29 @@
                 </div>
 
                 <div>
-                    <label for="destinationSelect" class="block text-sm font-medium text-slate-700 mb-1">您想前往哪個地區？ (機票比價用)</label>
+                    <label for="destinationSelect" class="block text-sm font-medium text-slate-700 mb-1">您想前往哪個地區？ (機票/行程/網卡比價用)</label>
                     <select id="destinationSelect" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-lg bg-white">
-                        <option value="none">請選擇一個目的地</option>
-                        <option value="japan-tokyo">日本 (東京 NRT)</option>
-                        <option value="japan-osaka">日本 (大阪 KIX)</option>
-                        <option value="thailand">泰國 (曼谷 BKK)</option>
-                        <option value="europe-paris">歐洲 (巴黎 CDG)</option>
+                        <option value="none">請選擇國家/城市...</option>
+                        <optgroup label="🇯🇵 日本">
+                            <option value="tokyo">東京</option>
+                            <option value="osaka">大阪</option>
+                        </optgroup>
+                        <optgroup label="🇰🇷 韓國">
+                            <option value="seoul">首爾</option>
+                            <option value="busan">釜山</option>
+                        </optgroup>
+                        <optgroup label="🇹🇭 泰國">
+                            <option value="bangkok">曼谷</option>
+                            <option value="phuket">普吉島</option>
+                        </optgroup>
+                        <option value="hongkong">🇭🇰 香港</option>
+                        <option value="singapore">🇸🇬 新加坡</option>
+                        <option value="vietnam-hanoi">🇻🇳 越南 (河內)</option>
+                        <optgroup label="🌎 長程">
+                            <option value="la">🇺🇸 洛杉磯</option>
+                            <option value="london">🇬🇧 倫敦</option>
+                            <option value="paris">🇫🇷 巴黎</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
@@ -117,35 +141,86 @@
             </div>
         </div>
 
+        <div id="flightResult" class="hidden bg-white p-6 rounded-2xl shadow-xl border-t-4 border-indigo-500 mb-8 flex-col gap-4">
+            </div>
+
         <div id="results" class="mt-10">
             <p class="text-center text-slate-500">點擊上方按鈕，即可開始規劃 2026 年連假！</p>
         </div>
 
         <div class="w-full h-[100px] bg-slate-100 flex items-center justify-center text-slate-500 text-sm mt-10 mb-8 rounded-lg border border-slate-200">
-            廣告顯示區域 (Bottom Banner)
+            廣告顯示區域 (Mid Banner)
         </div>
+
+        <section class="mt-12 bg-slate-800 rounded-2xl shadow-lg p-8 text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-teal-500 rounded-full opacity-20 blur-xl"></div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="md:w-2/3">
+                    <h3 class="text-2xl font-bold mb-2 flex items-center">
+                        <i class="fa-solid fa-plane-slash text-rose-400 mr-3"></i>
+                        擔心航班延誤或取消？
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        根據歐盟法規，如果您的航班延誤超過 3 小時或被取消，您可能有權獲得最高 <strong>€600 歐元</strong> (約台幣 20,000 元) 的賠償金。
+                        <br>AirHelp 是全球最大的航空索賠機構，提供「不成功、不收費」的服務，幫您爭取應有的權益。
+                    </p>
+                </div>
+                <div class="md:w-1/3 w-full">
+                    <a href="https://airhelp.tpx.li/Xir5mW5c" target="_blank" class="group flex items-center justify-center w-full bg-white text-slate-900 font-bold py-3 px-6 rounded-lg hover:bg-teal-50 transition shadow-lg border-2 border-transparent hover:border-teal-400">
+                        <span>立即檢查賠償資格</span>
+                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <p class="text-xs text-slate-400 text-center mt-2">AirHelp - 全球索賠領導品牌</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10 mb-12">
+            <div class="text-center text-slate-500 p-4 border-b border-slate-200 mb-6">
+                <h4 class="font-bold text-lg">深度文章與攻略</h4>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+                <a href="guide-bestyear.html" class="block p-3 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition shadow-sm text-sm text-indigo-700 font-medium">
+                    2026 最適合休假分析
+                </a>
+                <a href="guide-cny.html" class="block p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition shadow-sm text-sm text-purple-700 font-medium">
+                    春節 16 天長假攻略
+                </a>
+                <a href="guide-flights.html" class="block p-3 rounded-lg bg-teal-50 hover:bg-teal-100 transition shadow-sm text-sm text-teal-700 font-medium">
+                    機票飯店省錢術
+                </a>
+                <a href="guide-laborlaw.html" class="block p-3 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition shadow-sm text-sm text-yellow-700 font-medium">
+                    特休勞基法注意事項
+                </a>
+                <a href="guide-ga4-track.html" class="block p-3 rounded-lg bg-red-50 hover:bg-red-100 transition shadow-sm text-sm text-red-700 font-medium">
+                    GA4 點擊追蹤教學
+                </a>
+                <a href="privacy.html" class="block p-3 rounded-lg bg-slate-100 hover:bg-slate-200 transition shadow-sm text-sm text-slate-700 font-medium">
+                    隱私權政策 (必讀)
+                </a>
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-slate-800 text-center text-slate-400 py-8 text-sm mt-auto">
         <div class="container mx-auto px-4">
             <p class="mb-4 text-slate-300 font-bold">© 2026 請假小幫手 | Holihack</p>
             
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4 text-xs font-medium">
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4 text-xs">
                 <a href="privacy.html" class="hover:text-white transition underline">隱私權政策</a>
-                <span class="cursor-help" title="請參考行政院公告">免責聲明</span>
-                
-                <a href="guide-cny.html" class="text-purple-300 hover:text-white transition underline">春節 16 天長假攻略</a>
-                <a href="guide-flights.html" class="text-blue-300 hover:text-white transition underline">機票飯店省錢術</a>
-                <a href="guide-bestyear.html" class="text-rose-300 hover:text-white transition underline">2026 最適合休假分析</a>
-                <a href="guide-laborlaw.html" class="text-yellow-300 hover:text-white transition underline">特休勞基法注意事項</a>
-                <a href="guide-ga4-track.html" class="text-indigo-300 hover:text-white transition underline">GA4 點擊追蹤教學</a>
-                
                 <a href="https://github.com/heywoosa/heywoosa.github.io" target="_blank" class="hover:text-white transition underline">GitHub 開源</a>
+                <span class="cursor-help" title="請參考行政院公告">免責聲明</span>
             </div>
 
             <p class="text-xs text-slate-600">本網站資訊僅供參考，實際放假日期請以行政院人事行政總處公告為準。</p>
         </div>
     </footer>
+
+    <div id="shareModal" class="fixed inset-0 z-50 hidden">
+        </div>
 
     <script src="script.js"></script>
 </body>
