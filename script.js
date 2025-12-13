@@ -457,12 +457,47 @@ async function generateItinerary(destName, days) {
 function openShareModal(name, desc) {
     const myWebsiteUrl = window.location.href; 
     currentShareText = `【2026 請假攻略】\n${name}\n${desc}\n\n快來算你的連假方案：${myWebsiteUrl}`;
-    document.getElementById('shareModal').classList.remove('hidden');
+    const modal = document.getElementById('shareModal');
+    modal.classList.remove('hidden');
+    
+    // Lock body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    
+    // Focus management for accessibility
+    const firstButton = modal.querySelector('button');
+    if (firstButton) firstButton.focus();
 }
 
 function closeShareModal() {
-    document.getElementById('shareModal').classList.add('hidden');
+    const modal = document.getElementById('shareModal');
+    modal.classList.add('hidden');
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
 }
+
+// ESC key support for modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('shareModal');
+        if (modal && !modal.classList.contains('hidden')) {
+            closeShareModal();
+        }
+    }
+});
+
+// Backdrop click support (clicking outside modal content)
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            // Only close if clicking the backdrop itself, not its children
+            if (e.target === modal || e.target.classList.contains('backdrop-blur-sm')) {
+                closeShareModal();
+            }
+        });
+    }
+});
 
 function shareToLine() {
     const url = `https://line.me/R/msg/text/?${encodeURIComponent(currentShareText)}`;
@@ -496,4 +531,3 @@ function copyTextOnly() {
     });
     closeShareModal();
 }
-

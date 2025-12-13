@@ -1,13 +1,50 @@
 // api/generate.js
 // 這是運行在伺服器端的程式碼，絕對安全，不會暴露 API Key
 
+// Rate limiting cache (in-memory, resets on redeploy)
+const requestCache = new Map();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS = 3; // 3 requests per minute per IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const userRequests = requestCache.get(ip) || [];
+  
+  // Clean old requests
+  const recentRequests = userRequests.filter(time => now - time < RATE_LIMIT_WINDOW);
+  
+  if (recentRequests.length >= MAX_REQUESTS) {
+    return false;
+  }
+  
+  recentRequests.push(now);
+  requestCache.set(ip, recentRequests);
+  return true;
+}
+
 export default async function handler(req, res) {
   // 1. 檢查請求方法
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Only POST requests allowed' });
   }
 
-  // 2. 取得前端傳來的資料
+  // 2. Rate limiting check
+  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  if (!checkRateLimit(userIp)) {
+    return res.status(429).json({ 
+      message: '請求過於頻繁，請稍後再試 (每分鐘最多 3 次請求)' 
+    });
+  }
+
+  // 3. Validate API key exists
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is not set in environment variables');
+    return res.status(500).json({ 
+      message: 'AI 服務暫時無法使用，請稍後再試' 
+    });
+  }
+
+  // 4. 取得前端傳來的資料
   const { destination, days } = req.body;
 
   if (!destination || !days) {
@@ -15,7 +52,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 3. 呼叫 OpenAI API
+    // 5. 呼叫 OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -41,12 +78,12 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // 4. 錯誤處理
+    // 6. 錯誤處理
     if (data.error) {
       throw new Error(data.error.message);
     }
 
-    // 5. 回傳結果給前端
+    // 7. 回傳結果給前端
     const itinerary = data.choices[0].message.content;
     return res.status(200).json({ result: itinerary });
 
